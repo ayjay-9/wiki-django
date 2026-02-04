@@ -1,2 +1,2 @@
 # wiki-django
-A Django-based wiki application with Markdown support, search, editing, and random page navigation.
+This project is a Django-based wiki application that allows users to create, edit, search, and view Markdown-formatted encyclopedia entries.

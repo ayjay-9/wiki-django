@@ -55,7 +55,7 @@ def new_page(request):
         raw_title = request.POST.get("title").strip()
         title = raw_title.lstrip("# ").strip()
 
-        content = request.POST.get("content")
+        content = request.POST.get("content", "")
         # Check if an entry with the same title already exists
         entries = util.list_entries()
 
@@ -83,12 +83,11 @@ def edit_page(request, title):
     linked_title, body = entry.split("\n", 1)
     clean_title = linked_title.lstrip("# ").strip()
     body = body.lstrip("\n")
-    html_body = markdown2.markdown(body.strip())
     
     # If the request method is POST, save the edited content
     if request.method == "POST":
         # Get the updated content from the form submission
-        content = request.POST.get("content")
+        content = request.POST.get("content", "")
         content = content.replace("\r\n", "\n")  # Normalize line endings
         content = content.strip() # Remove leading/trailing whitespace
         content = re.sub(r'\n{3,}', '\n\n', content)  # Replace multiple newlines with one newlines

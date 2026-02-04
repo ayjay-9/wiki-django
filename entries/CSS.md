@@ -1,0 +1,3 @@
+# CSS
+
+<p>CSS is a language that can be used to add style to an <a href="/encyclopedia/wiki/HTML">HTML</a> page.</p>

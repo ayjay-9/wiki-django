@@ -65,7 +65,7 @@ def new_page(request):
             })
         else:
             # Save the new entry and redirect to its page
-            util.save_entry(title, f"# {title}\n{content}")
+            util.save_entry(title, f"# {title}\n\n{content}")
             return redirect("encyclopedia:entry", title=title)
     else:
         # If the request method is GET, render the new page form
@@ -102,7 +102,7 @@ def edit_page(request, title):
         # If the request method is GET, render the edit page form with current content
         return render(request, "encyclopedia/edit_page.html", {
             "title": clean_title,
-            "content": html_body,
+            "content": body,
         })
     
 # View function to display a random encyclopedia entry

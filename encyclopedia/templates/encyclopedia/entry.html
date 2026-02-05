@@ -10,7 +10,8 @@
 
     <p>{{ entry|safe }}</p>
 
-    <!-- Link to edit the entry --->
-    <a href="{% url 'encyclopedia:edit_page' title=title %}">Edit Page</a>
+    <!-- Link to edit the entry -->
+    <a class="btn btn-primary" id="edit_page_button" href="{% url 'encyclopedia:edit_page' title=title %}">Edit Page</a>
+    <a class="btn btn-danger" id="delete_page_button" href="{% url 'encyclopedia:delete_page' title=title %}">Delete Page</a>
 
 {% endblock %}

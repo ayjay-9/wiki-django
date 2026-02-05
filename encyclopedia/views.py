@@ -3,6 +3,7 @@ import random
 import re
 
 from django.shortcuts import redirect, render
+from django.contrib import messages
 
 from . import util
 
@@ -66,10 +67,15 @@ def new_page(request):
         else:
             # Save the new entry and redirect to its page
             util.save_entry(title, f"# {title}\n\n{content}")
+            messages.success(request, f"{title} created successfully")
             return redirect("encyclopedia:entry", title=title)
     else:
         # If the request method is GET, render the new page form
-        return render(request, "encyclopedia/new_page.html")
+        # Pre-fill title with `q` GET parameter when present (from search "Create" link)
+        query = request.GET.get("q", "")
+        return render(request, "encyclopedia/new_page.html", {
+            "query": query,
+        })
     
 # View function to allow users to edit an existing encyclopedia entry
 def edit_page(request, title):
@@ -96,6 +102,7 @@ def edit_page(request, title):
         util.save_entry(clean_title, f"# {clean_title}\n\n{content}")
         
         # Redirect to the updated entry page
+        messages.success(request, f"{clean_title} updated successfully")
         return redirect("encyclopedia:entry", title=clean_title)
     else:
         # If the request method is GET, render the edit page form with current content
@@ -103,6 +110,27 @@ def edit_page(request, title):
             "title": clean_title,
             "content": body,
         })
+    
+# View function to delete an encyclopedia entry
+def delete_page(request, title):
+    entry = util.get_entry(title)
+    if entry is None:
+        return render(request, "encyclopedia/error.html", {
+            "message": "The requested page was not found."
+        })
+
+    # If the request is POST, delete the entry
+    if request.method == "POST":
+        util.delete_entry(title)
+
+        # Add a success message and redirect to the index page
+        messages.success(request, f"{title} deleted successfully")
+        return redirect("encyclopedia:index")
+
+    # Otherwise (GET), render confirmation page
+    return render(request, "encyclopedia/delete_page.html", {
+        "title": title,
+    })
     
 # View function to display a random encyclopedia entry
 def random_entry(request):
